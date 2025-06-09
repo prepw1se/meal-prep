@@ -19,21 +19,7 @@ export default function VerifyEmailPage() {
           </p>
         </div>
 
-        <div className="space-y-4">
-          <div className="text-sm text-gray-500 text-center">
-            <p>Didn't receive the email?</p>
-            <p>Check your spam folder or</p>
-            <Button
-              variant="link"
-              className="text-green-600 hover:text-green-500"
-              onClick={() => {
-                // TODO: Implement resend verification email
-              }}
-            >
-              click here to resend
-            </Button>
-          </div>
-
+        <div className="space-y-2">
           <div className="pt-4">
             <Link href="/login">
               <Button

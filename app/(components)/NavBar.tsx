@@ -1,7 +1,32 @@
+'use client'
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { createClient } from '@/utils/supabase/client'
+import { useEffect, useState } from 'react'
 
 export function NavBar() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsAuthenticated(!!session)
+    }
+
+    checkAuth()
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-8 lg:px-12">
@@ -35,16 +60,26 @@ export function NavBar() {
           </Link>
         </nav>
         <div className="flex items-center gap-6 ml-4">
-          <Link href="/login">
-            <Button variant="outline" className="px-6">
-              Log in
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button className="bg-green-600 hover:bg-green-700 px-6">
-              Sign up
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/dashboard">
+              <Button className="bg-green-600 hover:bg-green-700 px-6">
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="outline" className="px-6">
+                  Log in
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="bg-green-600 hover:bg-green-700 px-6">
+                  Sign up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
