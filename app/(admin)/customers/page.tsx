@@ -40,10 +40,12 @@ import {
 import { createClient } from '@/utils/supabase/client';
 
 const supabase = createClient();
+const PAGE_SIZE = 2;
 
 export default function CustomersPage() {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
 
   const toggleCustomer = (customerId: string) => {
     setSelectedCustomers((prev) =>
@@ -64,7 +66,8 @@ export default function CustomersPage() {
   async function fetchCustomers() {
     const { data, error } = await supabase
       .from('customers')
-      .select('id, name, email, address, phone, created_at');
+      .select('id, name, email, address, phone, created_at')
+      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
     if (error) {
       console.error('Error fetching customers:', error);
@@ -89,7 +92,7 @@ export default function CustomersPage() {
       setCustomers(customers);
     }
     loadCustomers();
-  }, []);
+  }, [page]);
 
   return (
     <div className='flex-1 space-y-4 p-8 pt-6'>
@@ -264,13 +267,23 @@ export default function CustomersPage() {
             <div className='flex items-center justify-end space-x-2'>
               <div className='text-sm text-muted-foreground'>
                 Showing <span className='font-medium'>1</span> to{' '}
-                <span className='font-medium'>7</span> of{' '}
-                <span className='font-medium'>100</span> customers
+                <span className='font-medium'>{customers.length}</span> of{' '}
+                <span className='font-medium'>{PAGE_SIZE}</span> customers
               </div>
-              <Button variant='outline' size='sm' disabled>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
                 Previous
               </Button>
-              <Button variant='outline' size='sm'>
+              <Button
+                disabled={customers.length < PAGE_SIZE}
+                variant='outline'
+                size='sm'
+                onClick={() => setPage(page + 1)}
+              >
                 Next
               </Button>
             </div>
