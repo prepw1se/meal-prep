@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowUpDown,
@@ -11,7 +11,6 @@ import {
   Search,
   SlidersHorizontal,
 } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -38,83 +37,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { createClient } from '@/utils/supabase/client';
 
-// Sample customer data
-const customers = [
-  {
-    id: 'CUST-001',
-    name: 'Sarah Johnson',
-    email: 'sarah@example.com',
-    phone: '(555) 123-4567',
-    status: 'active',
-    plan: 'Weekly Meal Plan',
-    dietaryRestrictions: ['Gluten-Free', 'Dairy-Free'],
-    joinDate: 'Jan 10, 2025',
-  },
-  {
-    id: 'CUST-002',
-    name: 'Michael Chen',
-    email: 'michael@example.com',
-    phone: '(555) 234-5678',
-    status: 'active',
-    plan: 'Monthly Meal Plan',
-    dietaryRestrictions: ['Vegetarian'],
-    joinDate: 'Feb 15, 2025',
-  },
-  {
-    id: 'CUST-003',
-    name: 'Jessica Williams',
-    email: 'jessica@example.com',
-    phone: '(555) 345-6789',
-    status: 'inactive',
-    plan: 'Weekly Meal Plan',
-    dietaryRestrictions: ['Nut-Free'],
-    joinDate: 'Mar 5, 2025',
-  },
-  {
-    id: 'CUST-004',
-    name: 'David Kim',
-    email: 'david@example.com',
-    phone: '(555) 456-7890',
-    status: 'active',
-    plan: 'Custom Meal Plan',
-    dietaryRestrictions: ['Low-Carb', 'High-Protein'],
-    joinDate: 'Mar 20, 2025',
-  },
-  {
-    id: 'CUST-005',
-    name: 'Emily Davis',
-    email: 'emily@example.com',
-    phone: '(555) 567-8901',
-    status: 'active',
-    plan: 'Weekly Meal Plan',
-    dietaryRestrictions: ['Vegan'],
-    joinDate: 'Apr 2, 2025',
-  },
-  {
-    id: 'CUST-006',
-    name: 'Robert Wilson',
-    email: 'robert@example.com',
-    phone: '(555) 678-9012',
-    status: 'inactive',
-    plan: 'Monthly Meal Plan',
-    dietaryRestrictions: [],
-    joinDate: 'Apr 15, 2025',
-  },
-  {
-    id: 'CUST-007',
-    name: 'Jennifer Martinez',
-    email: 'jennifer@example.com',
-    phone: '(555) 789-0123',
-    status: 'active',
-    plan: 'Weekly Meal Plan',
-    dietaryRestrictions: ['Pescatarian'],
-    joinDate: 'May 1, 2025',
-  },
-];
+const supabase = createClient();
 
 export default function CustomersPage() {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+  const [customers, setCustomers] = useState<any[]>([]);
 
   const toggleCustomer = (customerId: string) => {
     setSelectedCustomers((prev) =>
@@ -131,6 +60,36 @@ export default function CustomersPage() {
         : customers.map((customer) => customer.id)
     );
   };
+
+  async function fetchCustomers() {
+    const { data, error } = await supabase
+      .from('customers')
+      .select('id, name, email, address, phone, created_at');
+
+    if (error) {
+      console.error('Error fetching customers:', error);
+      return [];
+    }
+
+    const customers = data?.map((customer) => ({
+      ...customer,
+      status: 'active',
+      plan: 'weekly',
+      dietary_restrictions: ['Diary-Free'],
+      created_at: new Date(customer.created_at).toLocaleDateString(),
+    }));
+
+    return customers || [];
+  }
+
+  useEffect(() => {
+    async function loadCustomers() {
+      const customers = await fetchCustomers();
+
+      setCustomers(customers);
+    }
+    loadCustomers();
+  }, []);
 
   return (
     <div className='flex-1 space-y-4 p-8 pt-6'>
@@ -267,25 +226,15 @@ export default function CustomersPage() {
                       <TableCell>{customer.plan}</TableCell>
                       <TableCell>
                         <div className='flex flex-wrap gap-1'>
-                          {customer.dietaryRestrictions.length > 0 ? (
-                            customer.dietaryRestrictions.map(
-                              (restriction, index) => (
-                                <span
-                                  key={index}
-                                  className='inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800'
-                                >
-                                  {restriction}
-                                </span>
-                              )
-                            )
-                          ) : (
-                            <span className='text-sm text-muted-foreground'>
-                              None
-                            </span>
-                          )}
+                          <span
+                            key='1'
+                            className='inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800'
+                          >
+                            Diary-Free
+                          </span>
                         </div>
                       </TableCell>
-                      <TableCell>{customer.joinDate}</TableCell>
+                      <TableCell>{customer.created_at}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
