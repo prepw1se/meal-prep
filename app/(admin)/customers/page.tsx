@@ -46,6 +46,7 @@ export default function CustomersPage() {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleCustomer = (customerId: string) => {
     setSelectedCustomers((prev) =>
@@ -67,6 +68,7 @@ export default function CustomersPage() {
     const { data, error } = await supabase
       .from('customers')
       .select('id, name, email, address, phone, created_at')
+      .ilike('name', `%${searchQuery}%`)
       .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
     if (error) {
@@ -92,7 +94,7 @@ export default function CustomersPage() {
       setCustomers(customers);
     }
     loadCustomers();
-  }, [page]);
+  }, [page, searchQuery]);
 
   return (
     <div className='flex-1 space-y-4 p-8 pt-6'>
@@ -125,6 +127,8 @@ export default function CustomersPage() {
                     type='search'
                     placeholder='Search customers...'
                     className='w-full min-w-[200px] pl-8 md:w-[300px]'
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
                 <DropdownMenu>
