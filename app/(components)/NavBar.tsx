@@ -1,31 +1,34 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { createClient } from '@/utils/supabase/client'
-import { useEffect, useState } from 'react'
+import { supabase } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
 export function NavBar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const supabase = createClient()
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setIsAuthenticated(!!session)
-    }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
 
-    checkAuth()
+    checkAuth();
 
     // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session)
-    })
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
 
     return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -8,7 +8,7 @@ export default function PipelinePage() {
     <div>
       <h1>Dashboard Page</h1>
       <Button>
-        <Link href='/dashboard/meals-pipeline'>Meals Pipeline</Link>
+        <Link href='/restaurant/dashboard/meals-pipeline'>Meals Pipeline</Link>
       </Button>
     </div>
   );
