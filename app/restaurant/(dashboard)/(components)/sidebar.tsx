@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { User } from '@/lib/types/user';
 
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
@@ -37,7 +38,7 @@ const SIDEBAR_LINKS = [
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ user }: { user: User }) {
   const pathname = usePathname();
   const PATH = '/restaurant';
 
@@ -79,10 +80,8 @@ export function Sidebar() {
             <div className='flex items-center gap-2'>
               <div className='h-8 w-8 rounded-full bg-muted' />
               <div>
-                <p className='text-sm font-medium'>Chef Alex</p>
-                <p className='text-xs text-muted-foreground'>
-                  admin@prepmaster.com
-                </p>
+                <p className='text-sm font-medium'>{user.name}</p>
+                <p className='text-xs text-muted-foreground'>{user.email}</p>
               </div>
             </div>
             <DropdownMenu>
@@ -117,7 +116,7 @@ export function Sidebar() {
                 size='sm'
                 className='relative h-8 md:hidden'
               >
-                <span>Chef Alex</span>
+                <span>{user.name}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>

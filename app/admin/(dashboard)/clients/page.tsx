@@ -98,8 +98,6 @@ export default function ClientsPage() {
 
       if (tenantError) throw tenantError;
 
-      // Create a new user in Supabase Auth
-
       const { data, error } = await supabase
         .from('users')
         .insert([

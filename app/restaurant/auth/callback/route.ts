@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/';
+  const next = requestUrl.searchParams.get('next') ?? '/restaurant/dashboard';
 
   if (code) {
     const supabase = await createClient();
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('id, name, email')
+      .select('id, name, email, auth_user_id, tenant_id')
       .eq('email', user.email)
       .single();
 
@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Update user metadata with tenant information
+    // might need to fix with supabase admin key (currently anon key)
     const { error: updateError } = await supabase.auth.admin.updateUserById(
       user.id,
       {
@@ -53,6 +54,22 @@ export async function GET(request: NextRequest) {
     if (updateError) {
       console.error('User metadata update error:', updateError);
       // Continue anyway as the main authentication was successful
+    }
+
+    if (!userData.auth_user_id) {
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ auth_user_id: user.id })
+        .eq('id', userData.id);
+
+      if (updateError) {
+        console.error('Error updating user:', updateError.message);
+        return NextResponse.redirect(
+          `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
+            'Access denied. Please contact your administrator.'
+          )}`
+        );
+      }
     }
 
     const forwardedHost = request.headers.get('x-forwarded-host');

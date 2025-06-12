@@ -24,13 +24,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { createClient } from '@/utils/supabase/client';
 
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/clients', label: 'Clients', icon: Users },
 ];
 
-export function Sidebar() {
+export async function Sidebar() {
+  const supabase = createClient();
+
+  const { data: userData, error } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  const user = userData.user;
   const pathname = usePathname();
   const PATH = '/admin';
 
@@ -109,7 +120,7 @@ export function Sidebar() {
                 size='sm'
                 className='relative h-8 md:hidden'
               >
-                <span>Chef Alex</span>
+                <span>Test</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
