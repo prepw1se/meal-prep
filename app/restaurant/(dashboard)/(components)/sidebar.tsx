@@ -29,6 +29,7 @@ import { User } from '@/lib/types/user';
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/customers', label: 'Customers', icon: Users },
+  { href: '/employees', label: 'Employees', icon: Users },
   { href: '/meals', label: 'Meals', icon: ClipboardList },
   { href: '/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/pipeline', label: 'Pipeline', icon: Workflow },

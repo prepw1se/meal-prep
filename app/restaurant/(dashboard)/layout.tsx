@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { Sidebar } from './(components)/sidebar';
 import { redirect } from 'next/navigation';
+import TenantProvider from './(context)/TenantProvider';
 
 export default async function DashboardLayout({
   children,
@@ -28,7 +29,9 @@ export default async function DashboardLayout({
   return (
     <div className='flex min-h-screen'>
       <Sidebar user={user} />
-      <div className='flex-1'>{children}</div>
+      <TenantProvider tenant_id={user.tenant_id} role={user.role}>
+        <div className='flex-1'>{children}</div>
+      </TenantProvider>
     </div>
   );
 }
