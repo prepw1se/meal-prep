@@ -1,27 +1,62 @@
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/";
+  const code = requestUrl.searchParams.get('code');
+  const next = requestUrl.searchParams.get('next') ?? '/';
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (error) {
-      console.error("Auth error:", error);
+    if (error || !user) {
+      console.error('Auth error:', error);
       return NextResponse.redirect(
         `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-          error.message
+          error?.message || 'User not found'
         )}`
       );
     }
 
-    const forwardedHost = request.headers.get("x-forwarded-host");
-    const isLocalEnv = process.env.NODE_ENV === "development";
+    // Check if the user's email exists in users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id, name, email')
+      .eq('email', user.email)
+      .single();
+
+    if (userError || !userData) {
+      console.error('User verification error:', userError || 'No user found');
+      return NextResponse.redirect(
+        `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
+          'Access denied. Please contact your administrator.'
+        )}`
+      );
+    }
+
+    // Update user metadata with tenant information
+    const { error: updateError } = await supabase.auth.admin.updateUserById(
+      user.id,
+      {
+        user_metadata: {
+          tenant_id: userData.id,
+          role: 'admin',
+        },
+      }
+    );
+
+    if (updateError) {
+      console.error('User metadata update error:', updateError);
+      // Continue anyway as the main authentication was successful
+    }
+
+    const forwardedHost = request.headers.get('x-forwarded-host');
+    const isLocalEnv = process.env.NODE_ENV === 'development';
 
     if (isLocalEnv) {
       return NextResponse.redirect(`${requestUrl.origin}${next}`);

@@ -27,15 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-interface Client {
-  id: string;
-  name: string;
-  adminName: string;
-  adminEmail: string;
-  isActive: boolean;
-  createdAt: string;
-}
+import { Client } from '@/lib/types/client';
 
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -98,7 +90,7 @@ export default function ClientsPage() {
             admin_email: newClient.adminEmail,
             admin_name:
               newClient.adminName || newClient.adminEmail.split('@')[0],
-            status: 'active',
+            isActive: false,
           },
         ])
         .select()
@@ -107,20 +99,23 @@ export default function ClientsPage() {
       if (tenantError) throw tenantError;
 
       // Create a new user in Supabase Auth
-      const { data: authData, error: authError } =
-        await supabase.auth.admin.createUser({
-          email: newClient.adminEmail,
-          email_confirm: true,
-          user_metadata: {
-            tenant_id: tenantData.id,
-            role: 'admin',
-          },
-        });
 
-      if (authError) {
+      const { data, error } = await supabase
+        .from('users')
+        .insert([
+          {
+            tenant_id: tenantData.id,
+            name: newClient.adminName,
+            email: newClient.adminEmail,
+            role: 'owner',
+          },
+        ])
+        .select();
+
+      if (error) {
         // Rollback tenant creation if user creation fails
         await supabase.from('tenants').delete().eq('id', tenantData.id);
-        throw authError;
+        throw error;
       }
 
       // Add the new client with actual values

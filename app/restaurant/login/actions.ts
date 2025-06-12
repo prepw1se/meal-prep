@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-
+import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 
 export async function login(formData: FormData) {
@@ -23,6 +23,31 @@ export async function login(formData: FormData) {
 
   revalidatePath('/', 'layout');
   redirect('/restaurant/dashboard');
+}
+
+export async function loginWithGoogle() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/restaurant/auth/callback`,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+    },
+  });
+
+  if (error) {
+    console.error('Google login error:', error.message);
+    redirect(`/login/error?error=${encodeURIComponent(error.message)}`);
+  }
+
+  // Redirect to Google's authorization page
+  if (data?.url) {
+    redirect(data.url);
+  }
 }
 
 export async function signup(formData: FormData) {
