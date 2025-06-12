@@ -33,7 +33,7 @@ interface Client {
   name: string;
   adminName: string;
   adminEmail: string;
-  status: 'active' | 'inactive';
+  isActive: boolean;
   createdAt: string;
 }
 
@@ -55,18 +55,21 @@ export default function ClientsPage() {
   const fetchClients = async () => {
     try {
       const supabase = createClient();
-      const { data, error } = await supabase.from('tenants').select('*');
+      const { data, error } = await supabase
+        .from('tenants')
+        .select('id, name, admin_name, admin_email, isActive, created_at');
 
       if (error) throw error;
 
-      // Transform the data to include default values for missing fields
       const transformedData = data.map((client: any) => ({
         id: client.id,
         name: client.name,
-        adminName: 'Admin User', // Default value
-        adminEmail: 'admin@example.com', // Default value
-        status: 'active' as const, // Default value
-        createdAt: new Date().toISOString().split('T')[0], // Default to current date
+        adminName: client.admin_name,
+        adminEmail: client.admin_email,
+        isActive: client.isActive,
+        createdAt: client.created_at
+          ? new Date(client.created_at).toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0],
       }));
 
       setClients(transformedData);
@@ -78,23 +81,55 @@ export default function ClientsPage() {
   };
 
   const handleCreateClient = async () => {
+    if (!newClient.name || !newClient.adminEmail) {
+      alert('Business name and admin email are required');
+      return;
+    }
+
     try {
       const supabase = createClient();
-      const { data, error } = await supabase
+
+      // First create the tenant
+      const { data: tenantData, error: tenantError } = await supabase
         .from('tenants')
-        .insert([{ name: newClient.name }])
+        .insert([
+          {
+            name: newClient.name,
+            admin_email: newClient.adminEmail,
+            admin_name:
+              newClient.adminName || newClient.adminEmail.split('@')[0],
+            status: 'active',
+          },
+        ])
         .select()
         .single();
 
-      if (error) throw error;
+      if (tenantError) throw tenantError;
 
-      // Add the new client with default values
+      // Create a new user in Supabase Auth
+      const { data: authData, error: authError } =
+        await supabase.auth.admin.createUser({
+          email: newClient.adminEmail,
+          email_confirm: true,
+          user_metadata: {
+            tenant_id: tenantData.id,
+            role: 'admin',
+          },
+        });
+
+      if (authError) {
+        // Rollback tenant creation if user creation fails
+        await supabase.from('tenants').delete().eq('id', tenantData.id);
+        throw authError;
+      }
+
+      // Add the new client with actual values
       const newClientWithDefaults = {
-        id: data.id,
-        name: data.name,
-        adminName: newClient.adminName || 'Admin User',
-        adminEmail: newClient.adminEmail || 'admin@example.com',
-        status: 'active' as const,
+        id: tenantData.id,
+        name: tenantData.name,
+        adminName: tenantData.admin_name,
+        adminEmail: tenantData.admin_email,
+        isActive: tenantData.isActive,
         createdAt: new Date().toISOString().split('T')[0],
       };
 
@@ -213,12 +248,12 @@ export default function ClientsPage() {
                     <TableCell>
                       <div
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          client.status === 'active'
+                          client.isActive
                             ? 'bg-green-100 text-green-800'
                             : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
-                        {client.status}
+                        {client.isActive ? 'Active' : 'Inactive'}
                       </div>
                     </TableCell>
                     <TableCell>{client.createdAt}</TableCell>
