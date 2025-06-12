@@ -47,7 +47,7 @@ export function Sidebar() {
     pathname === `${PATH}${path}` || pathname.startsWith(`${PATH}${path}/`);
 
   return (
-    <div className='flex min-h-screen'>
+    <div>
       <div className='hidden border-r bg-background md:block md:w-64'>
         <div className='flex h-16 items-center border-b px-4'>
           <Link
