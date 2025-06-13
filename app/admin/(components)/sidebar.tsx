@@ -31,17 +31,9 @@ const SIDEBAR_LINKS = [
   { href: '/clients', label: 'Clients', icon: Users },
 ];
 
-export async function Sidebar() {
+export function Sidebar() {
   const supabase = createClient();
 
-  const { data: userData, error } = await supabase.auth.getUser();
-
-  if (error) {
-    console.error(error);
-    return null;
-  }
-
-  const user = userData.user;
   const pathname = usePathname();
   const PATH = '/admin';
 

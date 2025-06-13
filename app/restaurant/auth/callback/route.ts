@@ -23,6 +23,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    console.log('AUTH USER: ', user);
+
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
       .from('users')

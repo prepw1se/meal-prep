@@ -1,9 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
-import { Sidebar } from './(components)/sidebar';
 import { redirect } from 'next/navigation';
 import TenantProvider from './(context)/TenantProvider';
+import { Sidebar } from './(components)/sidebar';
 
-export default async function DashboardLayout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,15 +21,15 @@ export default async function DashboardLayout({
     .eq('auth_user_id', data.user.id)
     .single();
 
-  if (error) {
+  if (error || !user) {
     console.error(error);
-    return null;
+    redirect('/restaurant/login');
   }
 
   return (
     <div className='flex min-h-screen'>
-      <Sidebar user={user} />
-      <TenantProvider tenant_id={user.tenant_id} role={user.role}>
+      <TenantProvider tenant_id={user.tenant_id} user={user}>
+        <Sidebar />
         <div className='flex-1'>{children}</div>
       </TenantProvider>
     </div>

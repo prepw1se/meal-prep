@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import {
   BarChart,
   Calendar,
@@ -24,7 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User } from '@/lib/types/user';
+import { useTenant } from '../(context)/tenant-context';
+import { createClient } from '@/utils/supabase/client';
 
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
@@ -39,14 +40,22 @@ const SIDEBAR_LINKS = [
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
-export function Sidebar({ user }: { user: User }) {
+export function Sidebar() {
   const pathname = usePathname();
   const PATH = '/restaurant';
+
+  const { user } = useTenant();
+  const supabase = createClient();
 
   if (pathname === '/') return null;
 
   const isActive = (path: string) =>
     pathname === `${PATH}${path}` || pathname.startsWith(`${PATH}${path}/`);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    redirect('/restaurant/login');
+  };
 
   return (
     <div>
@@ -98,7 +107,7 @@ export function Sidebar({ user }: { user: User }) {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className='mr-2 h-4 w-4' />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -106,33 +115,6 @@ export function Sidebar({ user }: { user: User }) {
             </DropdownMenu>
           </div>
         </div>
-      </div>
-      <div className='flex flex-col flex-1'>
-        <header className='sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6'>
-          <div className='flex-1' />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant='outline'
-                size='sm'
-                className='relative h-8 md:hidden'
-              >
-                <span>{user.name}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className='mr-2 h-4 w-4' />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </header>
       </div>
     </div>
   );
