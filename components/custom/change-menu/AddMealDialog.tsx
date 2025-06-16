@@ -14,6 +14,7 @@ import {
 import { Plus } from 'lucide-react';
 import { MenuItem } from '@/lib/types/menu';
 import { createClient } from '@/utils/supabase/client';
+import ImageUpload from './ImageUpload';
 
 interface AddMealDialogProps {
   onAdd: (item: MenuItem) => void;
@@ -26,7 +27,6 @@ export default function AddMealDialog({ onAdd }: AddMealDialogProps) {
     description: '',
     price: 0,
     available: true,
-    //category: "",
     image_url: '',
   });
 
@@ -47,7 +47,6 @@ export default function AddMealDialog({ onAdd }: AddMealDialogProps) {
         description: '',
         price: 0,
         available: true,
-        //category: "",
         image_url: '',
         quantity: 0,
       });
@@ -100,16 +99,11 @@ export default function AddMealDialog({ onAdd }: AddMealDialogProps) {
               }
             />
           </div>
-          <div>
-            <Label htmlFor='imageUrl'>Image URL</Label>
-            <Input
-              id='imageUrl'
-              value={newMeal.image_url}
-              onChange={(e) =>
-                setNewMeal({ ...newMeal, image_url: e.target.value })
-              }
-            />
-          </div>
+          <ImageUpload
+            currentImageUrl={newMeal.image_url}
+            onImageUpload={(url) => setNewMeal({ ...newMeal, image_url: url })}
+            onImageRemove={() => setNewMeal({ ...newMeal, image_url: '' })}
+          />
           <Button
             className='w-full bg-green-900 hover:bg-green-800 text-white'
             onClick={handleAdd}

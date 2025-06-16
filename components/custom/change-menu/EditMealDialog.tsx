@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { MenuItem } from '@/lib/types/menu';
 import { createClient } from '@/utils/supabase/client';
+import ImageUpload from './ImageUpload';
 
 interface EditMealDialogProps {
   item: MenuItem | null;
@@ -91,16 +92,11 @@ export default function EditMealDialog({
                 }
               />
             </div>
-            <div>
-              <Label htmlFor='edit-imageUrl'>Image URL</Label>
-              <Input
-                id='edit-imageUrl'
-                value={form.image_url || ''}
-                onChange={(e) =>
-                  setForm({ ...form, image_url: e.target.value })
-                }
-              />
-            </div>
+            <ImageUpload
+              currentImageUrl={form.image_url}
+              onImageUpload={(url) => setForm({ ...form, image_url: url })}
+              onImageRemove={() => setForm({ ...form, image_url: '' })}
+            />
             <Button
               className='w-full bg-green-900 hover:bg-green-800 text-white'
               onClick={handleUpdate}
