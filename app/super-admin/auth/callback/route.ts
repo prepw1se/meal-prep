@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/admin';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/admin/dashboard';
+  const next = requestUrl.searchParams.get('next') ?? '/super-admin/dashboard';
 
   if (code) {
     const supabase = await createClient();
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       {
         user_metadata: {
           tenant_id: userData.id,
-          role: 'admin',
+          role: 'super-admin',
         },
       }
     );

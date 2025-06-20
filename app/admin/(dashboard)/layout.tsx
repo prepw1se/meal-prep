@@ -15,6 +15,8 @@ export default async function Layout({
     redirect('/admin/login');
   }
 
+  console.log('AUTH USER ROLE: ', data.user.user_metadata.role);
+
   const { data: user, error } = await supabase
     .from('users')
     .select('*')

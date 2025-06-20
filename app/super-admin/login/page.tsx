@@ -2,11 +2,23 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
 import { loginWithGoogle } from './actions';
+import { redirect } from 'next/navigation';
 
 export default async function LoginPage() {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.user_metadata.role === 'super-admin') {
+    redirect('/super-admin/dashboard');
+  }
+
+  if (user?.user_metadata.role === 'admin') {
+    redirect('/admin/dashboard');
+  }
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50'>

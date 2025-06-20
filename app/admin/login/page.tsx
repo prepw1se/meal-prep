@@ -10,8 +10,13 @@ export default async function LoginPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) {
+
+  if (user?.user_metadata.role === 'admin') {
     redirect('/admin/dashboard');
+  }
+
+  if (user?.user_metadata.role === 'super-admin') {
+    redirect('/super-admin/dashboard');
   }
 
   return (

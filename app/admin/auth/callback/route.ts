@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/admin';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
@@ -22,8 +22,6 @@ export async function GET(request: NextRequest) {
         )}`
       );
     }
-
-    console.log('AUTH USER: ', user);
 
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
@@ -47,7 +45,7 @@ export async function GET(request: NextRequest) {
       user.id,
       {
         user_metadata: {
-          tenant_id: userData.id,
+          tenant_id: userData.tenant_id,
           role: 'admin',
         },
       }

@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/restaurant/dashboard');
+  redirect('/super-admin/dashboard');
 }
 
 export async function loginWithGoogle() {
@@ -30,7 +30,7 @@ export async function loginWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/admin/auth/callback`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/super-admin/auth/callback`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',
@@ -40,7 +40,7 @@ export async function loginWithGoogle() {
 
   if (error) {
     console.error('Google login error:', error.message);
-    redirect(`/login/error?error=${encodeURIComponent(error.message)}`);
+    redirect(`/error?error=${encodeURIComponent(error.message)}`);
   }
 
   // Redirect to Google's authorization page
@@ -67,7 +67,7 @@ export async function signup(formData: FormData) {
 
   if (error) {
     console.error('Signup error:', error.message);
-    redirect(`/login/error?error=${encodeURIComponent(error.message)}`);
+    redirect(`/error?error=${encodeURIComponent(error.message)}`);
   }
 
   // If signup is successful, redirect to a verification page
