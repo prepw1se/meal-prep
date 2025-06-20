@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import {
   BarChart,
   Calendar,
@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/utils/supabase/client';
+import { useAuth } from '../(context)/AuthContext';
 
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
@@ -34,6 +35,8 @@ const SIDEBAR_LINKS = [
 export function Sidebar() {
   const supabase = createClient();
 
+  const { user } = useAuth();
+
   const pathname = usePathname();
   const PATH = '/super-admin';
 
@@ -41,6 +44,11 @@ export function Sidebar() {
 
   const isActive = (path: string) =>
     pathname === `${PATH}${path}` || pathname.startsWith(`${PATH}${path}/`);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    redirect('/super-admin/login');
+  };
 
   return (
     <div>
@@ -74,10 +82,8 @@ export function Sidebar() {
             <div className='flex items-center gap-2'>
               <div className='h-8 w-8 rounded-full bg-muted' />
               <div>
-                <p className='text-sm font-medium'>Admin Kendrick</p>
-                <p className='text-xs text-muted-foreground'>
-                  admin@prepmaster.com
-                </p>
+                <p className='text-sm font-medium'>{user.name}</p>
+                <p className='text-xs text-muted-foreground'>{user.email}</p>
               </div>
             </div>
             <DropdownMenu>
@@ -93,7 +99,7 @@ export function Sidebar() {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className='mr-2 h-4 w-4' />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -101,33 +107,6 @@ export function Sidebar() {
             </DropdownMenu>
           </div>
         </div>
-      </div>
-      <div className='flex flex-col flex-1'>
-        <header className='sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6'>
-          <div className='flex-1' />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant='outline'
-                size='sm'
-                className='relative h-8 md:hidden'
-              >
-                <span>Test</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className='mr-2 h-4 w-4' />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </header>
       </div>
     </div>
   );
