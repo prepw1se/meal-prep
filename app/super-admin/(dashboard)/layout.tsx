@@ -1,9 +1,8 @@
-import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import TenantProvider from './(context)/TenantProvider';
-import { Sidebar } from './(components)/sidebar';
+import { Sidebar } from '../(components)/sidebar';
+import { createClient } from '@/utils/supabase/server';
 
-export default async function Layout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -12,26 +11,24 @@ export default async function Layout({
   const { data, error: authUserError } = await supabase.auth.getUser();
 
   if (authUserError || !data?.user) {
-    redirect('/restaurant/login');
+    redirect('/super-admin/login');
   }
 
   const { data: user, error } = await supabase
-    .from('users')
+    .from('superusers')
     .select('*')
     .eq('auth_user_id', data.user.id)
     .single();
 
   if (error || !user) {
     console.error(error);
-    redirect('/restaurant/login');
+    redirect('/super-admin/login');
   }
 
   return (
     <div className='flex min-h-screen'>
-      <TenantProvider tenant_id={user.tenant_id} user={user}>
-        <Sidebar />
-        <div className='flex-1'>{children}</div>
-      </TenantProvider>
+      <Sidebar />
+      <div className='flex-1'>{children}</div>
     </div>
   );
 }

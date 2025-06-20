@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTenant } from '../(context)/tenant-context';
+import { useAuth } from '../(context)/AuthContext';
 import { Meal } from '@/lib/types/meal';
 import { MenuItem } from '@/lib/types/menu';
 import { createClient } from '@/utils/supabase/client';
-import MenuTabs from '@/components/custom/change-menu/MenuTabs';
 import MenuItemCard from '@/components/custom/change-menu/MenuItemCard';
 import AddMealDialog from '@/components/custom/change-menu/AddMealDialog';
 import EditMealDialog from '@/components/custom/change-menu/EditMealDialog';
@@ -13,7 +12,7 @@ import EditMealDialog from '@/components/custom/change-menu/EditMealDialog';
 const DEFAULT_IMAGE_URL = 'https://placehold.co/400x400?text=No+Image';
 
 export default function MealsPage() {
-  const tenant = useTenant();
+  const tenant = useAuth();
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,9 +73,10 @@ export default function MealsPage() {
       price: updated.price,
       available: updated.available,
       category_id: updated.category,
-      image_url: updated.image_url === DEFAULT_IMAGE_URL ? null : updated.image_url,
+      image_url:
+        updated.image_url === DEFAULT_IMAGE_URL ? null : updated.image_url,
     };
-    
+
     const copy = [...meals];
     if (editingIndex !== null) copy[editingIndex] = updatedMeal;
     setMeals(copy);
@@ -104,10 +104,7 @@ export default function MealsPage() {
 
   return (
     <div className='container mx-auto px-4 py-10 bg-white min-h-screen'>
-
-      <h1 className='mb-8 text-4xl font-extrabold text-green-900'>
-        Meals
-      </h1>
+      <h1 className='mb-8 text-4xl font-extrabold text-green-900'>Meals</h1>
 
       <div className='grid grid-cols-3 gap-8'>
         {meals.map((meal, index) => (

@@ -1,9 +1,9 @@
 'use client';
 
 import { User } from '@/lib/types/user';
-import { TenantContext } from './tenant-context';
+import { AuthContext } from './AuthContext';
 
-export default function TenantProvider({
+export default function AuthProvider({
   tenant_id,
   user,
   children,
@@ -13,8 +13,8 @@ export default function TenantProvider({
   children: React.ReactNode;
 }) {
   return (
-    <TenantContext.Provider value={{ tenant_id, user }}>
+    <AuthContext.Provider value={{ tenant_id, user }}>
       {children}
-    </TenantContext.Provider>
+    </AuthContext.Provider>
   );
 }

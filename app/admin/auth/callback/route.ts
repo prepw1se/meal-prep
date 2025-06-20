@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
 
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
-      .from('superusers')
-      .select('id, name, email, auth_user_id')
+      .from('users')
+      .select('id, name, email, auth_user_id, tenant_id')
       .eq('email', user.email)
       .single();
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       console.error('User verification error:', userError || 'No user found');
       return NextResponse.redirect(
         `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-          'Here.'
+          'Access denied. Please contact your administrator.'
         )}`
       );
     }
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 
     if (!userData.auth_user_id) {
       const { error: updateError } = await supabase
-        .from('superusers')
+        .from('users')
         .update({ auth_user_id: user.id })
         .eq('id', userData.id);
 

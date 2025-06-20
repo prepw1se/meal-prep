@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/restaurant/dashboard';
+  const next = requestUrl.searchParams.get('next') ?? '/admin/dashboard';
 
   if (code) {
     const supabase = await createClient();
@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
 
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('id, name, email, auth_user_id, tenant_id')
+      .from('superusers')
+      .select('id, name, email, auth_user_id')
       .eq('email', user.email)
       .single();
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       console.error('User verification error:', userError || 'No user found');
       return NextResponse.redirect(
         `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-          'Access denied. Please contact your administrator.'
+          'Here.'
         )}`
       );
     }
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 
     if (!userData.auth_user_id) {
       const { error: updateError } = await supabase
-        .from('users')
+        .from('superusers')
         .update({ auth_user_id: user.id })
         .eq('id', userData.id);
 

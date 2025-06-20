@@ -35,7 +35,7 @@ export function Sidebar() {
   const supabase = createClient();
 
   const pathname = usePathname();
-  const PATH = '/admin';
+  const PATH = '/super-admin';
 
   if (pathname === '/') return null;
 

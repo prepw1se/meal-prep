@@ -1,8 +1,9 @@
-import { redirect } from 'next/navigation';
-import { Sidebar } from '../(components)/sidebar';
 import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import AuthProvider from './(context)/AuthProvider';
+import { Sidebar } from './(components)/sidebar';
 
-export default async function AdminLayout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export default async function AdminLayout({
   }
 
   const { data: user, error } = await supabase
-    .from('superusers')
+    .from('users')
     .select('*')
     .eq('auth_user_id', data.user.id)
     .single();
@@ -27,8 +28,10 @@ export default async function AdminLayout({
 
   return (
     <div className='flex min-h-screen'>
-      <Sidebar />
-      <div className='flex-1'>{children}</div>
+      <AuthProvider tenant_id={user.tenant_id} user={user}>
+        <Sidebar />
+        <div className='flex-1'>{children}</div>
+      </AuthProvider>
     </div>
   );
 }

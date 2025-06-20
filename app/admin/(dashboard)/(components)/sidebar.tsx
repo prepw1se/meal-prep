@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTenant } from '../(context)/tenant-context';
+import { useAuth } from '../(context)/AuthContext';
 import { createClient } from '@/utils/supabase/client';
 
 const SIDEBAR_LINKS = [
@@ -42,9 +42,9 @@ const SIDEBAR_LINKS = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const PATH = '/restaurant';
+  const PATH = '/admin';
 
-  const { user } = useTenant();
+  const { user } = useAuth();
   const supabase = createClient();
 
   if (pathname === '/') return null;
@@ -54,7 +54,7 @@ export function Sidebar() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    redirect('/restaurant/login');
+    redirect('/admin/login');
   };
 
   return (
