@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { createClient } from '@/utils/supabase/client';
-import { Upload, X, Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { createClient } from "@/utils/supabase/client";
+import { Upload, X, Loader2 } from "lucide-react";
 
 interface ImageUploadProps {
   currentImageUrl?: string | null;
@@ -20,46 +20,50 @@ export default function ImageUpload({
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     try {
       setUploading(true);
       setError(null);
 
       if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
+        throw new Error("You must select an image to upload.");
       }
 
       const file = event.target.files[0];
-      
+
       // Validate file type
-      if (!file.type.startsWith('image/')) {
-        throw new Error('File must be an image.');
+      if (!file.type.startsWith("image/")) {
+        throw new Error("File must be an image.");
       }
 
       // Validate file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-        throw new Error('Image must be less than 5MB.');
+        throw new Error("Image must be less than 5MB.");
       }
 
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const filePath = `${Math.random()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('meal-images')
+        .from("meal-images")
         .upload(filePath, file);
 
       if (uploadError) {
         throw uploadError;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('meal-images')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("meal-images").getPublicUrl(filePath);
 
       onImageUpload(publicUrl);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      setError(error instanceof Error ? error.message : 'Error uploading image!');
+      console.error("Error uploading image:", error);
+      setError(
+        error instanceof Error ? error.message : "Error uploading image!",
+      );
     } finally {
       setUploading(false);
     }
@@ -97,7 +101,7 @@ export default function ImageUpload({
           <Label
             htmlFor="image-upload"
             className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg ${
-              uploading ? 'opacity-50 cursor-not-allowed' : ''
+              uploading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             {uploading ? (
@@ -105,13 +109,11 @@ export default function ImageUpload({
             ) : (
               <Upload className="h-4 w-4" />
             )}
-            {uploading ? 'Uploading...' : 'Upload Image'}
+            {uploading ? "Uploading..." : "Upload Image"}
           </Label>
-          {error && (
-            <p className="mt-2 text-sm text-red-500">{error}</p>
-          )}
+          {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
         </div>
       </div>
     </div>
   );
-} 
+}

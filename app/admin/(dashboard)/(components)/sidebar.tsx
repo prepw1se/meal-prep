@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { redirect, usePathname } from 'next/navigation';
+import Link from "next/link";
+import { redirect, usePathname } from "next/navigation";
 import {
   BarChart,
   Calendar,
@@ -14,8 +14,8 @@ import {
   ShoppingCart,
   Users,
   Workflow,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,92 +23,92 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useAuth } from '../(context)/AuthContext';
-import { createClient } from '@/utils/supabase/client';
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "../(context)/AuthContext";
+import { createClient } from "@/utils/supabase/client";
 
 const SIDEBAR_LINKS = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/customers', label: 'Customers', icon: Users },
-  { href: '/employees', label: 'Employees', icon: Users },
-  { href: '/meals', label: 'Meals', icon: ClipboardList },
-  { href: '/orders', label: 'Orders', icon: ShoppingCart },
-  { href: '/pipeline', label: 'Pipeline', icon: Workflow },
-  { href: '/inventory', label: 'Inventory', icon: Package },
-  { href: '/schedule', label: 'Schedule', icon: Calendar },
-  { href: '/reports', label: 'Reports', icon: BarChart },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/customers", label: "Customers", icon: Users },
+  { href: "/employees", label: "Employees", icon: Users },
+  { href: "/meals", label: "Meals", icon: ClipboardList },
+  { href: "/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/pipeline", label: "Pipeline", icon: Workflow },
+  { href: "/inventory", label: "Inventory", icon: Package },
+  { href: "/schedule", label: "Schedule", icon: Calendar },
+  { href: "/reports", label: "Reports", icon: BarChart },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const PATH = '/admin';
+  const PATH = "/admin";
 
   const { user } = useAuth();
   const supabase = createClient();
 
-  if (pathname === '/') return null;
+  if (pathname === "/") return null;
 
   const isActive = (path: string) =>
     pathname === `${PATH}${path}` || pathname.startsWith(`${PATH}${path}/`);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    redirect('/admin/login');
+    redirect("/admin/login");
   };
 
   return (
     <div>
-      <div className='hidden border-r bg-background md:block md:w-64'>
-        <div className='flex h-16 items-center border-b px-4'>
+      <div className="hidden border-r bg-background md:block md:w-64">
+        <div className="flex h-16 items-center border-b px-4">
           <Link
             href={`${PATH}/dashboard`}
-            className='flex items-center gap-2 font-bold text-xl'
+            className="flex items-center gap-2 font-bold text-xl"
           >
-            <span className='text-green-600'>Prep</span>
+            <span className="text-green-600">Prep</span>
             <span>Master</span>
           </Link>
         </div>
-        <div className='flex flex-col gap-1 p-4'>
+        <div className="flex flex-col gap-1 p-4">
           {SIDEBAR_LINKS.map(({ href, label, icon: Icon }) => {
             const fullPath = `${PATH}${href}`;
             return (
               <Link key={href} href={fullPath}>
                 <Button
-                  variant={isActive(href) ? 'secondary' : 'ghost'}
-                  className='w-full justify-start'
+                  variant={isActive(href) ? "secondary" : "ghost"}
+                  className="w-full justify-start"
                 >
-                  <Icon className='mr-2 h-4 w-4' />
+                  <Icon className="mr-2 h-4 w-4" />
                   {label}
                 </Button>
               </Link>
             );
           })}
         </div>
-        <div className='absolute bottom-4 left-4 right-4'>
-          <div className='flex items-center justify-between rounded-lg border p-4'>
-            <div className='flex items-center gap-2'>
-              <div className='h-8 w-8 rounded-full bg-muted' />
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-muted" />
               <div>
-                <p className='text-sm font-medium'>{user.name}</p>
-                <p className='text-xs text-muted-foreground'>{user.email}</p>
+                <p className="text-sm font-medium">{user.name}</p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant='ghost' size='icon'>
-                  <ChevronDown className='h-4 w-4' />
-                  <span className='sr-only'>Menu</span>
+                <Button variant="ghost" size="icon">
+                  <ChevronDown className="h-4 w-4" />
+                  <span className="sr-only">Menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align='end'>
+              <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className='mr-2 h-4 w-4' />
+                  <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
