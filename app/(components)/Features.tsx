@@ -4,7 +4,7 @@ export function Features() {
       id="features"
       className="w-full py-12 md:py-24 lg:py-32 bg-muted/40"
     >
-      <div className="container px-4 md:px-6">
+      <div className="container px-4 md:px-6 mx-auto">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
@@ -55,7 +55,9 @@ export function Features() {
                 <div className="h-8 w-8 rounded-full bg-green-600" />
               </div>
               <h3 className="text-xl font-bold">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
+              <p className="text-muted-foreground text-center">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

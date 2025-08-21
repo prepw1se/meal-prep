@@ -5,6 +5,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 
+const navItems = [
+  { href: "#features", label: "Features" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#testimonials", label: "Testimonials" },
+  { href: "#faq", label: "FAQ" },
+];
+
 export function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const supabase = createClient();
@@ -38,30 +45,15 @@ export function NavBar() {
           <span className="font-bold text-xl py-2">PrepMaster</span>
         </div>
         <nav className="hidden md:flex gap-8 mx-auto">
-          <Link
-            href="#features"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground p-2"
-          >
-            Features
-          </Link>
-          <Link
-            href="#pricing"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground p-2"
-          >
-            Pricing
-          </Link>
-          <Link
-            href="#testimonials"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground p-2"
-          >
-            Testimonials
-          </Link>
-          <Link
-            href="#faq"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground p-2"
-          >
-            FAQ
-          </Link>
+          {navItems.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground p-2"
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
         <div className="flex items-center gap-6 ml-4">
           {isAuthenticated ? (

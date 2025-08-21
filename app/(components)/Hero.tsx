@@ -17,11 +17,11 @@ export function Hero() {
                 deliveries for your meal prep business.
               </p>
             </div>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
+            <div className="flex flex-col gap-4 min-[400px]:flex-row">
               <Link href="/signup">
                 <Button className="bg-green-600 hover:bg-green-700">
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href="#demo">
