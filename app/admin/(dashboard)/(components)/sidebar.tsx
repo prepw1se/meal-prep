@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
 import {
   BarChart,
   Calendar,
@@ -15,6 +13,8 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
+import Link from "next/link";
+import { redirect, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,8 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "../(context)/AuthContext";
 import { createClient } from "@/utils/supabase/client";
+import { useAuth } from "../(context)/AuthContext";
 
 const SIDEBAR_LINKS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },

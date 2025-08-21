@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { loginWithGoogle } from "./actions";
-import { redirect } from "next/navigation";
 
 export default async function LoginPage() {
   const supabase = await createClient();

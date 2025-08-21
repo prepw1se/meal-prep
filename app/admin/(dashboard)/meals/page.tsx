@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "../(context)/AuthContext";
+import AddMealDialog from "@/components/custom/change-menu/AddMealDialog";
+import EditMealDialog from "@/components/custom/change-menu/EditMealDialog";
+import MenuItemCard from "@/components/custom/change-menu/MenuItemCard";
 import { Meal } from "@/lib/types/meal";
 import { MenuItem } from "@/lib/types/menu";
 import { createClient } from "@/utils/supabase/client";
-import MenuItemCard from "@/components/custom/change-menu/MenuItemCard";
-import AddMealDialog from "@/components/custom/change-menu/AddMealDialog";
-import EditMealDialog from "@/components/custom/change-menu/EditMealDialog";
+import { useAuth } from "../(context)/AuthContext";
 
 const DEFAULT_IMAGE_URL = "https://placehold.co/400x400?text=No+Image";
 

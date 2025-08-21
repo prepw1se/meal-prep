@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
 
 export function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

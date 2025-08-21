@@ -1,9 +1,9 @@
 "use client";
 
+import { Loader2, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/utils/supabase/client";
-import { Upload, X, Loader2 } from "lucide-react";
 
 interface ImageUploadProps {
   currentImageUrl?: string | null;

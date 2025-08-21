@@ -1,7 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import AuthProvider from "./(context)/AuthProvider";
+import { createClient } from "@/utils/supabase/server";
 import { Sidebar } from "./(components)/sidebar";
+import AuthProvider from "./(context)/AuthProvider";
 
 export default async function Layout({
   children,

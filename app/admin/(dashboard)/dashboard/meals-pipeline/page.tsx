@@ -1,24 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import {
+  AlertCircle,
+  CheckCircle,
+  ChefHat,
   Clock,
+  Filter,
   MapPin,
   Phone,
-  ChefHat,
-  Truck,
-  CheckCircle,
-  AlertCircle,
-  Timer,
-  Search,
-  Filter,
   Plus,
+  Search,
+  Timer,
+  Truck,
 } from "lucide-react";
-
+import { useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const initialOrders = [
   {

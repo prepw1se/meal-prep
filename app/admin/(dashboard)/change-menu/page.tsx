@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { MenuItem } from "@/lib/types/menu";
-import MenuTabs from "@/components/custom/change-menu/MenuTabs";
-import MenuItemCard from "@/components/custom/change-menu/MenuItemCard";
 import AddMealDialog from "@/components/custom/change-menu/AddMealDialog";
 import EditMealDialog from "@/components/custom/change-menu/EditMealDialog";
+import MenuItemCard from "@/components/custom/change-menu/MenuItemCard";
+import MenuTabs from "@/components/custom/change-menu/MenuTabs";
+import { MenuItem } from "@/lib/types/menu";
+import { createClient } from "@/utils/supabase/client";
 
 export default function MealsPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);

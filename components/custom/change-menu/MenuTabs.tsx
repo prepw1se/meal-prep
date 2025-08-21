@@ -1,8 +1,8 @@
 "use client";
 
+import { Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
 
 export default function MenuTabs() {
   const router = useRouter();

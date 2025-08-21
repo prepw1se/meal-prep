@@ -1,6 +1,6 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 export function Cta() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-green-600 text-white">

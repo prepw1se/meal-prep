@@ -1,17 +1,8 @@
 "use client";
 
+import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Plus, Search, MoreHorizontal } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -20,14 +11,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Client } from "@/lib/types/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = useState("");

@@ -1,9 +1,8 @@
 "use client";
 
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { MenuItem } from "@/lib/types/menu";
 import { createClient } from "@/utils/supabase/client";
 import ImageUpload from "./ImageUpload";

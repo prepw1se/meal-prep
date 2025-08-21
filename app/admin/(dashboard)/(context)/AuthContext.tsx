@@ -1,7 +1,7 @@
 "use client";
 
-import { User } from "@/lib/types/user";
 import { createContext, useContext } from "react";
+import { User } from "@/lib/types/user";
 
 export const AuthContext = createContext<{
   tenant_id: string;
