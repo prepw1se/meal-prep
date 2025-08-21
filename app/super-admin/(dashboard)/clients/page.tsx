@@ -1,17 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Plus, Search, MoreHorizontal } from 'lucide-react';
-import { createClient } from '@/utils/supabase/client';
-import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { MoreHorizontal, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,24 +10,33 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Client } from '@/lib/types/client';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Client } from "@/lib/types/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function ClientsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newClient, setNewClient] = useState({
-    name: '',
-    adminName: '',
-    adminEmail: '',
+    name: "",
+    adminName: "",
+    adminEmail: "",
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -48,8 +48,8 @@ export default function ClientsPage() {
     try {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from('tenants')
-        .select('id, name, admin_name, admin_email, isActive, created_at');
+        .from("tenants")
+        .select("id, name, admin_name, admin_email, isActive, created_at");
 
       if (error) throw error;
 
@@ -60,13 +60,13 @@ export default function ClientsPage() {
         adminEmail: client.admin_email,
         isActive: client.isActive,
         createdAt: client.created_at
-          ? new Date(client.created_at).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0],
+          ? new Date(client.created_at).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
       }));
 
       setClients(transformedData);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error("Error fetching clients:", error);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +74,7 @@ export default function ClientsPage() {
 
   const handleCreateClient = async () => {
     if (!newClient.name || !newClient.adminEmail) {
-      alert('Business name and admin email are required');
+      alert("Business name and admin email are required");
       return;
     }
 
@@ -83,13 +83,13 @@ export default function ClientsPage() {
 
       // First create the tenant
       const { data: tenantData, error: tenantError } = await supabase
-        .from('tenants')
+        .from("tenants")
         .insert([
           {
             name: newClient.name,
             admin_email: newClient.adminEmail,
             admin_name:
-              newClient.adminName || newClient.adminEmail.split('@')[0],
+              newClient.adminName || newClient.adminEmail.split("@")[0],
             isActive: false,
           },
         ])
@@ -99,20 +99,20 @@ export default function ClientsPage() {
       if (tenantError) throw tenantError;
 
       const { data, error } = await supabase
-        .from('users')
+        .from("users")
         .insert([
           {
             tenant_id: tenantData.id,
             name: newClient.adminName,
             email: newClient.adminEmail,
-            role: 'owner',
+            role: "owner",
           },
         ])
         .select();
 
       if (error) {
         // Rollback tenant creation if user creation fails
-        await supabase.from('tenants').delete().eq('id', tenantData.id);
+        await supabase.from("tenants").delete().eq("id", tenantData.id);
         throw error;
       }
 
@@ -123,25 +123,25 @@ export default function ClientsPage() {
         adminName: tenantData.admin_name,
         adminEmail: tenantData.admin_email,
         isActive: tenantData.isActive,
-        createdAt: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString().split("T")[0],
       };
 
       setClients([...clients, newClientWithDefaults]);
-      setNewClient({ name: '', adminName: '', adminEmail: '' });
+      setNewClient({ name: "", adminName: "", adminEmail: "" });
       setIsDialogOpen(false);
     } catch (error) {
-      console.error('Error creating client:', error);
+      console.error("Error creating client:", error);
     }
   };
 
   return (
-    <div className='flex min-h-screen flex-col p-6 space-y-6'>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-2xl font-bold'>Clients</h1>
+    <div className="flex min-h-screen flex-col p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Clients</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
-              <Plus className='mr-2 h-4 w-4' />
+              <Plus className="mr-2 h-4 w-4" />
               Add Client
             </Button>
           </DialogTrigger>
@@ -152,11 +152,11 @@ export default function ClientsPage() {
                 Add a new client to the platform.
               </DialogDescription>
             </DialogHeader>
-            <div className='space-y-4'>
+            <div className="space-y-4">
               <div>
-                <label className='text-sm font-medium'>Business Name</label>
+                <label className="text-sm font-medium">Business Name</label>
                 <Input
-                  placeholder='Enter business name'
+                  placeholder="Enter business name"
                   value={newClient.name}
                   onChange={(e) =>
                     setNewClient({ ...newClient, name: e.target.value })
@@ -164,9 +164,9 @@ export default function ClientsPage() {
                 />
               </div>
               <div>
-                <label className='text-sm font-medium'>Admin Name</label>
+                <label className="text-sm font-medium">Admin Name</label>
                 <Input
-                  placeholder='Enter admin name'
+                  placeholder="Enter admin name"
                   value={newClient.adminName}
                   onChange={(e) =>
                     setNewClient({ ...newClient, adminName: e.target.value })
@@ -174,17 +174,17 @@ export default function ClientsPage() {
                 />
               </div>
               <div>
-                <label className='text-sm font-medium'>Admin Email</label>
+                <label className="text-sm font-medium">Admin Email</label>
                 <Input
-                  type='email'
-                  placeholder='Enter admin email'
+                  type="email"
+                  placeholder="Enter admin email"
                   value={newClient.adminEmail}
                   onChange={(e) =>
                     setNewClient({ ...newClient, adminEmail: e.target.value })
                   }
                 />
               </div>
-              <Button className='w-full' onClick={handleCreateClient}>
+              <Button className="w-full" onClick={handleCreateClient}>
                 Create Client
               </Button>
             </div>
@@ -192,19 +192,19 @@ export default function ClientsPage() {
         </Dialog>
       </div>
 
-      <div className='flex items-center space-x-2'>
-        <div className='relative flex-1'>
-          <Search className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
+      <div className="flex items-center space-x-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder='Search clients...'
-            className='pl-8'
+            placeholder="Search clients..."
+            className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -212,28 +212,28 @@ export default function ClientsPage() {
               <TableHead>Admin</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created At</TableHead>
-              <TableHead className='w-[50px]'></TableHead>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={5} className='text-center'>
+                <TableCell colSpan={5} className="text-center">
                   Loading...
                 </TableCell>
               </TableRow>
             ) : (
               clients
                 .filter((client) =>
-                  client.name.toLowerCase().includes(searchQuery.toLowerCase())
+                  client.name.toLowerCase().includes(searchQuery.toLowerCase()),
                 )
                 .map((client) => (
                   <TableRow key={client.id}>
-                    <TableCell className='font-medium'>{client.name}</TableCell>
+                    <TableCell className="font-medium">{client.name}</TableCell>
                     <TableCell>
                       <div>
                         <div>{client.adminName}</div>
-                        <div className='text-sm text-muted-foreground'>
+                        <div className="text-sm text-muted-foreground">
                           {client.adminEmail}
                         </div>
                       </div>
@@ -242,24 +242,24 @@ export default function ClientsPage() {
                       <div
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           client.isActive
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
                         }`}
                       >
-                        {client.isActive ? 'Active' : 'Inactive'}
+                        {client.isActive ? "Active" : "Inactive"}
                       </div>
                     </TableCell>
                     <TableCell>{client.createdAt}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant='ghost' className='h-8 w-8 p-0'>
-                            <MoreHorizontal className='h-4 w-4' />
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align='end'>
+                        <DropdownMenuContent align="end">
                           <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem className='text-red-600'>
+                          <DropdownMenuItem className="text-red-600">
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>

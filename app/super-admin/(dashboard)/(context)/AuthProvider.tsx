@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { User } from '@/lib/types/user';
-import { AuthContext } from './AuthContext';
+import { User } from "@/lib/types/user";
+import { AuthContext } from "./AuthContext";
 
 export default function AuthProvider({
   user,
