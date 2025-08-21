@@ -41,9 +41,7 @@ export function NavBar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto container flex h-16 items-center sm:px-8">
-        <div className="flex items-center gap-2 py-2">
-          <span className="font-bold text-xl py-2">PrepMaster</span>
-        </div>
+        <span className="font-bold text-xl py-2">PrepMaster</span>
         <nav className="hidden md:flex gap-8 mx-auto">
           {navItems.map(({ href, label }) => (
             <Link
@@ -55,7 +53,7 @@ export function NavBar() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-6 ml-4">
+        <div className="flex items-center gap-6 sm:ml-auto md:ml-0">
           {isAuthenticated ? (
             <Link href="/dashboard">
               <Button className="bg-green-600 hover:bg-green-700 px-6">

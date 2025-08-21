@@ -19,7 +19,7 @@ export default function Home() {
         <FAQ />
         <Cta />
       </main>
-      <footer className="flex items-center w-full border-t *:py-4 md:py-0">
+      <footer className="flex items-center w-full border-t *:py-4 md:py-0 px-3">
         <p className="text-sm leading-loose text-muted-foreground md:text-left">
           © 2025 PrepMaster. All rights reserved.
         </p>
