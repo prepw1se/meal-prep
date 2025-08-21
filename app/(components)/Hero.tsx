@@ -1,11 +1,11 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-      <div className="container px-4 md:px-6">
+      <div className="container px-4 md:px-6 mx-auto">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
@@ -17,11 +17,11 @@ export function Hero() {
                 deliveries for your meal prep business.
               </p>
             </div>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
+            <div className="flex flex-col gap-4 min-[400px]:flex-row">
               <Link href="/signup">
                 <Button className="bg-green-600 hover:bg-green-700">
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href="#demo">

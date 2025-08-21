@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
-import { Sidebar } from './(components)/sidebar';
-import { createClient } from '@/utils/supabase/server';
-import AuthProvider from './(context)/AuthProvider';
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
+import { Sidebar } from "./(components)/sidebar";
+import AuthProvider from "./(context)/AuthProvider";
 
 export default async function AdminLayout({
   children,
@@ -12,25 +12,25 @@ export default async function AdminLayout({
   const { data, error: authUserError } = await supabase.auth.getUser();
 
   if (authUserError || !data?.user) {
-    redirect('/super-admin/login');
+    redirect("/super-admin/login");
   }
 
   const { data: user, error } = await supabase
-    .from('superusers')
-    .select('*')
-    .eq('auth_user_id', data.user.id)
+    .from("superusers")
+    .select("*")
+    .eq("auth_user_id", data.user.id)
     .single();
 
   if (error || !user) {
     console.error(error);
-    redirect('/super-admin/login');
+    redirect("/super-admin/login");
   }
 
   return (
-    <div className='flex min-h-screen'>
+    <div className="flex min-h-screen">
       <AuthProvider user={user}>
         <Sidebar />
-        <div className='flex-1'>{children}</div>
+        <div className="flex-1">{children}</div>
       </AuthProvider>
     </div>
   );

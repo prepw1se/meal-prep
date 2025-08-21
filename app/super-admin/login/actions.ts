@@ -1,8 +1,8 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -10,36 +10,36 @@ export async function login(formData: FormData) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   };
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    redirect('/error');
+    redirect("/error");
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/super-admin/dashboard');
+  revalidatePath("/", "layout");
+  redirect("/super-admin/dashboard");
 }
 
 export async function loginWithGoogle() {
   const supabase = await createClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+    provider: "google",
     options: {
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/super-admin/auth/callback`,
       queryParams: {
-        access_type: 'offline',
-        prompt: 'consent',
+        access_type: "offline",
+        prompt: "consent",
       },
     },
   });
 
   if (error) {
-    console.error('Google login error:', error.message);
+    console.error("Google login error:", error.message);
     redirect(`/error?error=${encodeURIComponent(error.message)}`);
   }
 
@@ -53,8 +53,8 @@ export async function signup(formData: FormData) {
   const supabase = await createClient();
 
   const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   };
 
   const { error, data: signUpData } = await supabase.auth.signUp({
@@ -66,10 +66,10 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    console.error('Signup error:', error.message);
+    console.error("Signup error:", error.message);
     redirect(`/error?error=${encodeURIComponent(error.message)}`);
   }
 
   // If signup is successful, redirect to a verification page
-  redirect('/login/verify-email');
+  redirect("/login/verify-email");
 }

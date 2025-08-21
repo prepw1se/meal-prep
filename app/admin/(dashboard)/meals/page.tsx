@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '../(context)/AuthContext';
-import { Meal } from '@/lib/types/meal';
-import { MenuItem } from '@/lib/types/menu';
-import { createClient } from '@/utils/supabase/client';
-import MenuItemCard from '@/components/custom/change-menu/MenuItemCard';
-import AddMealDialog from '@/components/custom/change-menu/AddMealDialog';
-import EditMealDialog from '@/components/custom/change-menu/EditMealDialog';
+import { useEffect, useState } from "react";
+import AddMealDialog from "@/components/custom/change-menu/AddMealDialog";
+import EditMealDialog from "@/components/custom/change-menu/EditMealDialog";
+import MenuItemCard from "@/components/custom/change-menu/MenuItemCard";
+import { Meal } from "@/lib/types/meal";
+import { MenuItem } from "@/lib/types/menu";
+import { createClient } from "@/utils/supabase/client";
+import { useAuth } from "../(context)/AuthContext";
 
-const DEFAULT_IMAGE_URL = 'https://placehold.co/400x400?text=No+Image';
+const DEFAULT_IMAGE_URL = "https://placehold.co/400x400?text=No+Image";
 
 export default function MealsPage() {
   const tenant = useAuth();
@@ -24,13 +24,13 @@ export default function MealsPage() {
   const fetchMeals = async () => {
     setLoading(true);
     let { data: meals, error } = await supabase
-      .from('meals')
-      .select('*')
-      .eq('tenant_id', tenant.tenant_id);
+      .from("meals")
+      .select("*")
+      .eq("tenant_id", tenant.tenant_id);
 
     if (error) {
       console.error(error);
-      setError('Failed to fetch meals.');
+      setError("Failed to fetch meals.");
     } else {
       setMeals(meals || []);
     }
@@ -42,7 +42,7 @@ export default function MealsPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from('meals').delete().eq('id', id);
+    const { error } = await supabase.from("meals").delete().eq("id", id);
     if (!error) {
       setMeals(meals.filter((m) => m.id !== id));
     }
@@ -53,10 +53,10 @@ export default function MealsPage() {
     const menuItem: MenuItem = {
       id: meal.id,
       name: meal.name,
-      description: meal.description || '',
+      description: meal.description || "",
       price: meal.price,
       available: meal.available || true,
-      category: meal.category_id || '',
+      category: meal.category_id || "",
       image_url: meal.image_url || DEFAULT_IMAGE_URL,
       quantity: 0, // Default value since Meal doesn't have quantity
     };
@@ -99,24 +99,24 @@ export default function MealsPage() {
     setMeals([...meals, newMeal]);
   };
 
-  if (loading) return <p className='text-center mt-10'>Loading...</p>;
-  if (error) return <p className='text-center mt-10 text-red-500'>{error}</p>;
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
-    <div className='container mx-auto px-4 py-10 bg-white min-h-screen'>
-      <h1 className='mb-8 text-4xl font-extrabold text-green-900'>Meals</h1>
+    <div className="container mx-auto px-4 py-10 bg-white min-h-screen">
+      <h1 className="mb-8 text-4xl font-extrabold text-green-900">Meals</h1>
 
-      <div className='grid grid-cols-3 gap-8'>
+      <div className="grid grid-cols-3 gap-8">
         {meals.map((meal, index) => (
           <MenuItemCard
             key={meal.id}
             item={{
               id: meal.id,
               name: meal.name,
-              description: meal.description || '',
+              description: meal.description || "",
               price: meal.price,
               available: meal.available || true,
-              category: meal.category_id || '',
+              category: meal.category_id || "",
               image_url: meal.image_url || DEFAULT_IMAGE_URL,
               quantity: 0, // Default value since Meal doesn't have quantity
             }}
