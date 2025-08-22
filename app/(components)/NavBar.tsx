@@ -62,14 +62,9 @@ export function NavBar() {
             </Link>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/admin/login">
                 <Button variant="outline" className="px-6">
                   Log in
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button className="bg-green-600 hover:bg-green-700 px-6">
-                  Sign up
                 </Button>
               </Link>
             </>
