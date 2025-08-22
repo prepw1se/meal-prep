@@ -70,7 +70,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link
           href={`${PATH}/dashboard`}
@@ -88,7 +88,7 @@ export function AppSidebar() {
                 const fullPath = `${PATH}${href}`;
                 return (
                   <SidebarMenuItem key={href}>
-                    <SidebarMenuButton asChild isActive={isActive(href)}>
+                    <SidebarMenuButton asChild isActive={isActive(href)} tooltip={label}>
                       <Link href={fullPath}>
                         <Icon />
                         <span>{label}</span>
