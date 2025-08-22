@@ -1,11 +1,12 @@
-import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
-import { createClient } from '@/utils/supabase/admin';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/admin";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? '/admin/dashboard';
+  const code = requestUrl.searchParams.get("code");
+  const next = requestUrl.searchParams.get("next") ?? "/admin/dashboard";
+
+  //
 
   if (code) {
     const supabase = await createClient();
@@ -15,27 +16,27 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error || !user) {
-      console.error('Auth error:', error);
+      console.error("Auth error:", error);
       return NextResponse.redirect(
         `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-          error?.message || 'User not found'
-        )}`
+          error?.message || "User not found",
+        )}`,
       );
     }
 
     // Check if the user's email exists in users table
     const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('id, name, email, auth_user_id, tenant_id')
-      .eq('email', user.email)
+      .from("users")
+      .select("id, name, email, auth_user_id, tenant_id")
+      .eq("email", user.email)
       .single();
 
     if (userError || !userData) {
-      console.error('User verification error:', userError || 'No user found');
+      console.error("User verification error:", userError || "No user found");
       return NextResponse.redirect(
         `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-          'Access denied. Please contact your administrator.'
-        )}`
+          "Access denied. Please contact your administrator.",
+        )}`,
       );
     }
 
@@ -46,34 +47,34 @@ export async function GET(request: NextRequest) {
       {
         user_metadata: {
           tenant_id: userData.tenant_id,
-          role: 'admin',
+          role: "admin",
         },
-      }
+      },
     );
 
     if (updateError) {
-      console.error('User metadata update error:', updateError);
+      console.error("User metadata update error:", updateError);
       // Continue anyway as the main authentication was successful
     }
 
     if (!userData.auth_user_id) {
       const { error: updateError } = await supabase
-        .from('users')
+        .from("users")
         .update({ auth_user_id: user.id })
-        .eq('id', userData.id);
+        .eq("id", userData.id);
 
       if (updateError) {
-        console.error('Error updating user:', updateError.message);
+        console.error("Error updating user:", updateError.message);
         return NextResponse.redirect(
           `${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(
-            'Access denied. Please contact your administrator.'
-          )}`
+            "Access denied. Please contact your administrator.",
+          )}`,
         );
       }
     }
 
-    const forwardedHost = request.headers.get('x-forwarded-host');
-    const isLocalEnv = process.env.NODE_ENV === 'development';
+    const forwardedHost = request.headers.get("x-forwarded-host");
+    const isLocalEnv = process.env.NODE_ENV === "development";
 
     if (isLocalEnv) {
       return NextResponse.redirect(`${requestUrl.origin}${next}`);
@@ -86,6 +87,6 @@ export async function GET(request: NextRequest) {
 
   // More informative error redirect
   return NextResponse.redirect(
-    `${new URL(request.url).origin}/auth/auth-code-error?error=missing_code`
+    `${new URL(request.url).origin}/auth/auth-code-error?error=missing_code`,
   );
 }
