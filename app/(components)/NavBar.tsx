@@ -55,7 +55,7 @@ export function NavBar() {
         </nav>
         <div className="flex items-center gap-6 sm:ml-auto md:ml-0">
           {isAuthenticated ? (
-            <Link href="/dashboard">
+            <Link href="/admin/dashboard">
               <Button className="bg-green-600 hover:bg-green-700 px-6">
                 Dashboard
               </Button>
