@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { Sidebar } from "./(components)/sidebar";
 import AuthProvider from "./(context)/AuthProvider";
+import { Sidebar } from "./(components)/sidebar";
 
 export default async function Layout({
   children,
