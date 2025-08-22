@@ -19,6 +19,7 @@ A modern web application built with Next.js for managing meal preparation and re
 - Admin dashboard for managing restaurants and orders
 - Modern UI components with Radix UI
 - Responsive design with Tailwind CSS
+- Landing page for clients.
 
 ## Getting Started
 
