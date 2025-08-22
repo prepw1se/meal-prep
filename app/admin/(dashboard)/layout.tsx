@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from '@/utils/supabase/server';
 import AuthProvider from "./(context)/AuthProvider";
 import { Sidebar } from "./(components)/sidebar";
 

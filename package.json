@@ -41,6 +41,6 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.{js,ts,json,css,md}": "biome check --write"
+    "*.{js,ts,json,css,md}": "bunx biome check --write"
   }
 }
