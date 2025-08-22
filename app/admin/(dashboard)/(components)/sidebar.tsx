@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,6 +70,20 @@ export function AppSidebar() {
     redirect("/admin/login");
   };
 
+  const getInitials = (name?: string, email?: string) => {
+    if (name) {
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase();
+    }
+    if (email) {
+      return email[0].toUpperCase();
+    }
+    return "U";
+  };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -114,9 +129,11 @@ export function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    <div className="h-6 w-6 rounded-full bg-muted" />
-                  </div>
+                  <Avatar className="size-8">
+                    <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground">
+                      {getInitials(user?.name, user?.email)}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user?.name}</span>
                     <span className="truncate text-xs">{user?.email}</span>
@@ -132,7 +149,11 @@ export function AppSidebar() {
               >
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <div className="h-6 w-6 rounded-full bg-muted" />
+                    <Avatar className="size-6">
+                      <AvatarFallback>
+                        {getInitials(user?.name, user?.email)}
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
                         {user?.name}
