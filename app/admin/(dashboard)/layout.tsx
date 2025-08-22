@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { Sidebar } from "./(components)/sidebar";
+import { AdminSidebarWrapper } from "./(components)/sidebar";
 import AuthProvider from "./(context)/AuthProvider";
 
 export default async function Layout({
@@ -29,11 +29,8 @@ export default async function Layout({
   }
 
   return (
-    <div className="flex min-h-screen">
-      <AuthProvider tenant_id={user.tenant_id} user={user}>
-        <Sidebar />
-        <div className="flex-1">{children}</div>
-      </AuthProvider>
-    </div>
+    <AuthProvider tenant_id={user.tenant_id} user={user}>
+      <AdminSidebarWrapper>{children}</AdminSidebarWrapper>
+    </AuthProvider>
   );
 }
