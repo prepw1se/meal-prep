@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
+import * as React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -59,6 +60,15 @@ export function AppSidebar() {
   const PATH = "/admin";
   const { user } = useAuth();
   const supabase = createClient();
+  const [authUser, setAuthUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const getAuthUser = async () => {
+      const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+      setAuthUser(supabaseUser);
+    };
+    getAuthUser();
+  }, [supabase]);
 
   if (pathname === "/") return null;
 
@@ -83,6 +93,8 @@ export function AppSidebar() {
     }
     return "U";
   };
+
+  const avatarUrl = authUser?.user_metadata?.avatar_url;
 
   return (
     <Sidebar collapsible="icon">
@@ -130,6 +142,7 @@ export function AppSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="size-8">
+                    <AvatarImage src={avatarUrl} alt={user?.name || user?.email || "User"} />
                     <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground">
                       {getInitials(user?.name, user?.email)}
                     </AvatarFallback>
@@ -150,6 +163,7 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="size-6">
+                      <AvatarImage src={avatarUrl} alt={user?.name || user?.email || "User"} />
                       <AvatarFallback>
                         {getInitials(user?.name, user?.email)}
                       </AvatarFallback>
