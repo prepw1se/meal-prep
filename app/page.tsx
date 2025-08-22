@@ -1,10 +1,10 @@
-import { NavBar } from "./(components)/NavBar";
-import { Hero } from "./(components)/Hero";
+import { Cta } from "./(components)/Cta";
+import { FAQ } from "./(components)/Faq";
 import { Features } from "./(components)/Features";
+import { Hero } from "./(components)/Hero";
+import { NavBar } from "./(components)/NavBar";
 import { Pricing } from "./(components)/Pricing";
 import { Testimonials } from "./(components)/Testimonial";
-import { FAQ } from "./(components)/Faq";
-import { Cta } from "./(components)/Cta";
 
 export default function Home() {
   return (
