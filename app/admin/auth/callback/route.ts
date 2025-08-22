@@ -6,8 +6,6 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get("code");
   const next = requestUrl.searchParams.get("next") ?? "/admin/dashboard";
 
-  //
-
   if (code) {
     const supabase = await createClient();
     const {
