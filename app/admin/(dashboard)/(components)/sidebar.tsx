@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
 import {
   BarChart,
   Calendar,
@@ -15,6 +13,8 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
+import Link from "next/link";
+import { redirect, usePathname } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -88,7 +88,11 @@ export function AppSidebar() {
                 const fullPath = `${PATH}${href}`;
                 return (
                   <SidebarMenuItem key={href}>
-                    <SidebarMenuButton asChild isActive={isActive(href)} tooltip={label}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(href)}
+                      tooltip={label}
+                    >
                       <Link href={fullPath}>
                         <Icon />
                         <span>{label}</span>
@@ -130,7 +134,9 @@ export function AppSidebar() {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <div className="h-6 w-6 rounded-full bg-muted" />
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">{user?.name}</span>
+                      <span className="truncate font-semibold">
+                        {user?.name}
+                      </span>
                       <span className="truncate text-xs">{user?.email}</span>
                     </div>
                   </div>
@@ -152,7 +158,11 @@ export function AppSidebar() {
   );
 }
 
-export function AdminSidebarWrapper({ children }: { children: React.ReactNode }) {
+export function AdminSidebarWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarProvider>
       <AppSidebar />
