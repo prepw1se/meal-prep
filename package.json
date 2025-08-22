@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "check": "biome check .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
@@ -24,7 +25,9 @@
     "@supabase/supabase-js": "^2.50.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.541.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -39,5 +42,8 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.2",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,css,md}": "bunx biome check --write"
   }
 }
