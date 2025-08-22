@@ -64,7 +64,9 @@ export function AppSidebar() {
 
   React.useEffect(() => {
     const getAuthUser = async () => {
-      const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: supabaseUser },
+      } = await supabase.auth.getUser();
       setAuthUser(supabaseUser);
     };
     getAuthUser();
@@ -142,7 +144,10 @@ export function AppSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="size-8">
-                    <AvatarImage src={avatarUrl} alt={user?.name || user?.email || "User"} />
+                    <AvatarImage
+                      src={avatarUrl}
+                      alt={user?.name || user?.email || "User"}
+                    />
                     <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground">
                       {getInitials(user?.name, user?.email)}
                     </AvatarFallback>
@@ -163,7 +168,10 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="size-6">
-                      <AvatarImage src={avatarUrl} alt={user?.name || user?.email || "User"} />
+                      <AvatarImage
+                        src={avatarUrl}
+                        alt={user?.name || user?.email || "User"}
+                      />
                       <AvatarFallback>
                         {getInitials(user?.name, user?.email)}
                       </AvatarFallback>
