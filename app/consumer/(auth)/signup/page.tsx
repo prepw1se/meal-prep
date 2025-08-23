@@ -8,10 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
@@ -21,50 +22,105 @@ export default function LoginPage() {
             <h1 className="text-2xl font-bold text-primary">PrepMaster</h1>
           </Link>
           <p className="mt-2 text-sm text-muted-foreground">
-            Welcome back to your meal subscription
+            Join thousands enjoying weekly meal deliveries
           </p>
         </div>
 
-        {/* Login Form */}
+        {/* Signup Form */}
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-semibold">Sign in</CardTitle>
+            <CardTitle className="text-2xl font-semibold">
+              Create account
+            </CardTitle>
             <CardDescription>
-              Enter your email and password to access your account
+              Enter your details to get started with your meal subscription
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First name</Label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder="John"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last name</Label>
+                  <Input id="lastName" type="text" placeholder="Doe" required />
+                </div>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="john@example.com"
                   required
                   className="w-full"
                 />
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/forgot-password"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Create a strong password"
+                  required
+                  className="w-full"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Must be at least 8 characters with letters and numbers
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
                   required
                   className="w-full"
                 />
               </div>
+
+              {/* Terms and Privacy */}
+              <div className="flex items-center space-x-2">
+                <Checkbox id="terms" required />
+                <Label
+                  htmlFor="terms"
+                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the{" "}
+                  <Link href="/terms" className="text-primary hover:underline">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="text-primary hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>
+                </Label>
+              </div>
+
+              {/* Marketing emails */}
+              <div className="flex items-center space-x-2">
+                <Checkbox id="marketing" />
+                <Label
+                  htmlFor="marketing"
+                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Send me updates about new restaurants and special offers
+                </Label>
+              </div>
+
               <Button type="submit" className="w-full">
-                Sign in
+                Create account
               </Button>
             </form>
 
@@ -80,7 +136,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Social Login */}
+            {/* Social Signup */}
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" type="button">
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -115,16 +171,16 @@ export default function LoginPage() {
               </Button>
             </div>
 
-            {/* Sign up link */}
+            {/* Sign in link */}
             <div className="text-center text-sm">
               <span className="text-muted-foreground">
-                Don't have an account?{" "}
+                Already have an account?{" "}
               </span>
               <Link
-                href="/signup"
+                href="/login"
                 className="text-primary hover:underline font-medium"
               >
-                Sign up
+                Sign in
               </Link>
             </div>
           </CardContent>
