@@ -25,6 +25,34 @@ const navLinks = [
   { href: "#pricing", label: "Pricing" },
 ];
 
+const mockMenus = [
+  {
+    name: "Grilled Salmon Bowl",
+    description:
+      "Atlantic salmon with quinoa, roasted vegetables, and lemon herb sauce",
+    price: "$18.99",
+    image: "grilled salmon bowl with quinoa and vegetables",
+    restaurant: "Ocean's Table",
+    rating: 4.8,
+  },
+  {
+    name: "Truffle Mushroom Risotto",
+    description: "Creamy arborio rice with wild mushrooms and truffle oil",
+    price: "$16.99",
+    image: "creamy truffle mushroom risotto in elegant bowl",
+    restaurant: "Bella Vista",
+    rating: 4.9,
+  },
+  {
+    name: "Korean BBQ Tacos",
+    description: "Marinated beef bulgogi with kimchi slaw and gochujang aioli",
+    price: "$14.99",
+    image: "korean bbq tacos with kimchi and sauce",
+    restaurant: "Seoul Kitchen",
+    rating: 4.7,
+  },
+];
+
 // ConsumerLandingPage
 export default function Home() {
   return (
@@ -49,9 +77,11 @@ export default function Home() {
           </nav>
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="sm">
-              Login
+              <Link href="consumer/login">Login</Link>
             </Button>
-            <Button size="sm">Sign Up</Button>
+            <Button size="sm">
+              <Link href="consumer/signup">Sign Up</Link>
+            </Button>
           </div>
         </div>
       </header>
@@ -77,14 +107,14 @@ export default function Home() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg px-8">
-                  Start Your Subscription
+                  <Link href="#">Start Your Subscription</Link>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
                   className="text-lg px-8 bg-transparent"
                 >
-                  Browse Restaurants
+                  <Link href="#menu">Browse Menu</Link>
                 </Button>
               </div>
               <div className="flex items-center space-x-8 text-sm text-muted-foreground">
@@ -138,35 +168,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Grilled Salmon Bowl",
-                description:
-                  "Atlantic salmon with quinoa, roasted vegetables, and lemon herb sauce",
-                price: "$18.99",
-                image: "grilled salmon bowl with quinoa and vegetables",
-                restaurant: "Ocean's Table",
-                rating: 4.8,
-              },
-              {
-                name: "Truffle Mushroom Risotto",
-                description:
-                  "Creamy arborio rice with wild mushrooms and truffle oil",
-                price: "$16.99",
-                image: "creamy truffle mushroom risotto in elegant bowl",
-                restaurant: "Bella Vista",
-                rating: 4.9,
-              },
-              {
-                name: "Korean BBQ Tacos",
-                description:
-                  "Marinated beef bulgogi with kimchi slaw and gochujang aioli",
-                price: "$14.99",
-                image: "korean bbq tacos with kimchi and sauce",
-                restaurant: "Seoul Kitchen",
-                rating: 4.7,
-              },
-            ].map((dish, index) => (
+            {mockMenus.map((dish, index) => (
               <Card
                 key={index}
                 className="group hover:shadow-lg transition-all duration-300 cursor-pointer"

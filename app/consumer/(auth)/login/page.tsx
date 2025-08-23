@@ -18,7 +18,7 @@ export default function LoginPage() {
         {/* Logo/Brand */}
         <div className="text-center">
           <Link href="/" className="inline-block">
-            <h1 className="text-2xl font-bold text-primary">PrepMaster</h1>
+            <h1 className="text-2xl font-bold text-primary">PrepWise</h1>
           </Link>
           <p className="mt-2 text-sm text-muted-foreground">
             Welcome back to your meal subscription
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 Don't have an account?{" "}
               </span>
               <Link
-                href="/signup"
+                href="signup"
                 className="text-primary hover:underline font-medium"
               >
                 Sign up
@@ -136,7 +136,7 @@ export default function LoginPage() {
             href="/"
             className="text-sm text-muted-foreground hover:text-primary"
           >
-            ← Back to PrepMaster
+            ← Back to PrepWise
           </Link>
         </div>
       </div>
