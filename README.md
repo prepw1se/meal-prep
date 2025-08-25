@@ -113,7 +113,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `bun start` - Start the production server
 - `bun run lint` - Run ESLint for code linting
 - `bun run check` - Run Biome checks for code formatting and imports
-- `bun run format` - Auto-format code using Biome
+- `bun run check --write` - Auto Biome Format
 
 ## Authentication & Authorization
 
